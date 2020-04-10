@@ -450,7 +450,7 @@ $GLOBALS['TL_DCA']['tl_disam'] = array
 			'flag'                    => 11,
 			'filter'                  => true,
 			'sql'                     => "varchar(3) NOT NULL default ''",
-			'options'                 => \Samson\disam\Helper::getVerbaende(),
+			'options'                 => array(),
 			'eval'                    => array
 			(
 				'mandatory'           => true,
@@ -485,7 +485,7 @@ $GLOBALS['TL_DCA']['tl_disam'] = array
 			'search'                  => true,
 			'sorting'                 => true,
 			'filter'                  => true,
-			'options'                 => \Samson\disam\Helper::getLizenzen(),
+			'options'                 => array(),
 			'eval'                    => array
 			(
 				'chosen'              => true,
@@ -978,7 +978,7 @@ class tl_disam extends \Backend
 
 		for($x=0;$x<count($args);$x++)
 		{
-			$args[$x] = \Samson\Helper::getDate($args[$x]);
+			//$args[$x] = \Samson\Helper::getDate($args[$x]);
 		}
 		return $args; 
 	} 
@@ -1230,7 +1230,7 @@ class tl_disam extends \Backend
 		// GÜLTIGKEIT DER LIZENZ
 		// ----------------------------------------------------------------
 		// Letztes Verlängerungsdatum ermitteln
-		$verlaengerung = \Samson\disam\Helper::getVerlaengerung($dc->activeRecord->erwerb, $dc->activeRecord->verlaengerungen);
+		//$verlaengerung = \Samson\disam\Helper::getVerlaengerung($dc->activeRecord->erwerb, $dc->activeRecord->verlaengerungen);
 
 		// Zulässiges Gültigkeitsdatum feststellen
 		switch(substr($dc->activeRecord->lizenz,0,1))
