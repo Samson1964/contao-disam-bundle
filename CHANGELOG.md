@@ -1,5 +1,9 @@
 # Deutsche Internet-Schach-Amateurmeisterschaft - Changelog
 
+## Version 0.0.4 (2020-04-10)
+
+phpoffice/phpspreadsheet statt alte PHPExcel-Klasse
+
 ## Version 0.0.3 (2020-04-10)
 
 Helper-Aufrufe deaktiviert
