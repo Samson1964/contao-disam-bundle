@@ -1,7 +1,7 @@
 {
-    "name": "schachbulle/contao-elo-bundle",
+    "name": "schachbulle/contao-disam-bundle",
     "type": "contao-bundle",
-    "description": "Verwaltung von Elo-Zahlen für Contao 4",
+    "description": "Verwaltung der Deutschen Internet-Schach-Amateurmeisterschaft für Contao 4",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
@@ -12,7 +12,8 @@
     "require": {
         "php": "^5.6 || ^7.0",
         "contao/core-bundle": "^4",
-        "schachbulle/contao-helper-bundle": ">=0"
+        "schachbulle/contao-helper-bundle": ">=0",
+        "phpoffice/phpexcel": ">=1.8"
     },
     "conflict": {
         "contao/core": "*",
@@ -23,15 +24,15 @@
         "doctrine/doctrine-cache-bundle": "^1.3"
     },
     "extra": {
-        "contao-manager-plugin": "Schachbulle\\ContaoEloBundle\\ContaoManager\\Plugin"
+        "contao-manager-plugin": "Schachbulle\\ContaoDisamBundle\\ContaoManager\\Plugin"
     },
     "autoload": {
         "psr-4": {
-            "Schachbulle\\ContaoEloBundle\\": "src/"
+            "Schachbulle\\ContaoDisamBundle\\": "src/"
         }
     },
     "support": {
-        "issues": "https://github.com/Samson1964/contao-elo-bundle/issues",
-        "source": "https://github.com/Samson1964/contao-elo-bundle"
+        "issues": "https://github.com/Samson1964/contao-disam-bundle/issues",
+        "source": "https://github.com/Samson1964/contao-disam-bundle"
     }
 }
