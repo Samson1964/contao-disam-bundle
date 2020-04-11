@@ -1,5 +1,11 @@
 # Deutsche Internet-Schach-Amateurmeisterschaft - Changelog
 
+## Version 0.0.6 (2020-04-11)
+
+Add: Übersetzungen
+Add: Definitionen tl_disam
+Add: Abhängigkeit menatwork/contao-multicolumnwizard-bundle
+
 ## Version 0.0.5 (2020-04-11)
 
 Excel-Export fertiggestellt
