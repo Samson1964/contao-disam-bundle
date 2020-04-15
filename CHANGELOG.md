@@ -1,5 +1,9 @@
 # Deutsche Internet-Schach-Amateurmeisterschaft - Changelog
 
+## Version 0.0.8 (2020-04-15)
+
+Neu: Kennzeichnung Finalteilnehmer im Export
+
 ## Version 0.0.7 (2020-04-15)
 
 Add: Konfigurationsparameter für die Saison

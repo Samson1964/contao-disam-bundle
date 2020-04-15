@@ -69,7 +69,8 @@ class Export extends \Backend
 							'verein'   => $records->verein,
 							'account'  => $account,
 							'dwz'      => $records->dwz,
-							'titel'    => $records->titel
+							'titel'    => $records->titel,
+							'finale'   => in_array('F', $turniere) ? 'X' : ''
 						);
 					}
 				}
@@ -81,7 +82,8 @@ class Export extends \Backend
 					'verein'   => $records->verein,
 					'account'  => $records->account,
 					'dwz'      => $records->dwz,
-					'titel'    => $records->titel
+					'titel'    => $records->titel,
+					'finale'   => in_array('F', $turniere) ? 'X' : ''
 				);
 			}
 		}
@@ -126,8 +128,8 @@ class Export extends \Backend
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
-			$spreadsheet->getActiveSheet()->getStyle('A1:G1')->applyFromArray($styleArray);
-			$spreadsheet->getActiveSheet()->getStyle('A2:G1000')->applyFromArray($styleArray2);
+			$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:H1000')->applyFromArray($styleArray2);
 			$spreadsheet->getActiveSheet()->setTitle($sheet)
 			            ->setCellValue('A1', 'Gruppe')
 			            ->setCellValue('B1', 'Turniere')
@@ -135,7 +137,8 @@ class Export extends \Backend
 			            ->setCellValue('D1', 'Verein')
 			            ->setCellValue('E1', 'DWZ')
 			            ->setCellValue('F1', 'Titel')
-			            ->setCellValue('G1', 'ChessBase');
+			            ->setCellValue('G1', 'ChessBase')
+			            ->setCellValue('H1', 'Finale');
 			$zeile = 2;
 			if($daten[$sheet])
 			{
@@ -148,7 +151,8 @@ class Export extends \Backend
 					            ->setCellValue('D'.$zeile, $item['verein'])
 					            ->setCellValue('E'.$zeile, $item['dwz'])
 					            ->setCellValue('F'.$zeile, $item['titel'])
-					            ->setCellValue('G'.$zeile, $item['account']);
+					            ->setCellValue('G'.$zeile, $item['account'])
+					            ->setCellValue('H'.$zeile, $item['finale']);
 					$zeile++;
 				}
 			}
