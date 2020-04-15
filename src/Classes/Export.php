@@ -47,27 +47,31 @@ class Export extends \Backend
 			while($records->next())
 			{
 				$turniere = explode(',', $records->turniere); // Turniere sind so getrennt: 1,2,3,F
+				$accounts = explode('|', $records->account); // Accounts ChessBase sind so getrennt: Nick1|Nick2
 				foreach($turniere as $turnier)
 				{
-					// Tabellenname festlegen und Anmeldung in Array speichern
-					switch($turnier)
+					foreach($accounts as $account)
 					{
-						case '1': $name = 'Vor1_'.$records->gruppe; break;
-						case '2': $name = 'Vor2_'.$records->gruppe; break;
-						case '3': $name = 'Vor3_'.$records->gruppe; break;
-						case 'F': $name = 'Fin_'.$records->gruppe; break;
-						default: $name = '';
+						// Tabellenname festlegen und Anmeldung in Array speichern
+						switch($turnier)
+						{
+							case '1': $name = 'Vor1_'.$records->gruppe; break;
+							case '2': $name = 'Vor2_'.$records->gruppe; break;
+							case '3': $name = 'Vor3_'.$records->gruppe; break;
+							case 'F': $name = 'Fin_'.$records->gruppe; break;
+							default: $name = '';
+						}
+						$daten[$name][] = array
+						(
+							'gruppe'   => $records->gruppe,
+							'turniere' => '',
+							'name'     => $records->nachname.','.$records->vorname,
+							'verein'   => $records->verein,
+							'account'  => $account,
+							'dwz'      => $records->dwz,
+							'titel'    => $records->titel
+						);
 					}
-					$daten[$name][] = array
-					(
-						'gruppe'   => $records->gruppe,
-						'turniere' => '',
-						'name'     => $records->nachname.','.$records->vorname,
-						'verein'   => $records->verein,
-						'account'  => $records->account,
-						'dwz'      => $records->dwz,
-						'titel'    => $records->titel
-					);
 				}
 				$daten['alle'][] = array
 				(
@@ -122,6 +126,8 @@ class Export extends \Backend
 			{
 				$spreadsheet->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			}
+			$spreadsheet->getActiveSheet()->getStyle('A1:G1')->applyFromArray($styleArray);
+			$spreadsheet->getActiveSheet()->getStyle('A2:G1000')->applyFromArray($styleArray2);
 			$spreadsheet->getActiveSheet()->setTitle($sheet)
 			            ->setCellValue('A1', 'Gruppe')
 			            ->setCellValue('B1', 'Turniere')
@@ -130,8 +136,6 @@ class Export extends \Backend
 			            ->setCellValue('E1', 'DWZ')
 			            ->setCellValue('F1', 'Titel')
 			            ->setCellValue('G1', 'ChessBase');
-			$spreadsheet->getActiveSheet()->getStyle('A1:G1')->applyFromArray($styleArray);
-			$spreadsheet->getActiveSheet()->getStyle('A2:G1000')->applyFromArray($styleArray2);
 			$zeile = 2;
 			if($daten[$sheet])
 			{
@@ -172,7 +176,7 @@ class Export extends \Backend
 		$objMail->attachFile('bundles/contaodisam/'.$dateiname);
 		$objMail->sendBcc('Frank Hoppe <webmaster@schachbund.de>'); 
 		$objMail->sendCc('Reinhold Goldau <goldaureinhold@gmail.com>'); 
-		$objMail->sendTo('Martin Fischer <martin.fischer@chessbase.com>');
+		$objMail->sendTo('DISAM-Turnierleitung <disam@schachbund.de>');
 
 		// Redirect output to a client’s web browser (Xls)
 		header('Content-Type: application/vnd.ms-excel');

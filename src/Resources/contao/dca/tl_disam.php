@@ -94,14 +94,22 @@ $GLOBALS['TL_DCA']['tl_disam'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_disam']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
-			)
+			),
+			'export' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_disam']['export'],
+				'href'                => 'key=exportXLS',
+				'icon'                => 'bundles/contaodisam/images/exportEXCEL.gif',
+				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['tl_disam']['exportConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+			), 
+
 		)
 	),
 	// Palettes
 	'palettes' => array
 	(
 		'__selector__'                => array(),
-		'default'                     => '{disam_legend},titel,jahr;{publish_legend},published'
+		'default'                     => '{export_legend},export_anmeldungen;{disam_legend},titel,jahr;{config_legend},email;{gruppen_legend},gruppen;{turniere_legend},turniere;{publish_legend},published'
 	),
 
 	// Subpalettes
@@ -122,6 +130,13 @@ $GLOBALS['TL_DCA']['tl_disam'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_disam']['tstamp'],
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
+		// Button zum Export der Anmeldungen
+		'export_anmeldungen' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_disam']['export_anmeldungen'],
+			'exclude'                 => true,
+			'input_field_callback'    => array('tl_disam', 'getExportAnmeldungen')
+		), 
 		// Titel der Meisterschaft
 		'titel' => array
 		(
@@ -155,6 +170,106 @@ $GLOBALS['TL_DCA']['tl_disam'] = array
 				'tl_class'            => 'w50'
 			),
 			'sql'                     => "int(4) unsigned NOT NULL default '0'"
+		),
+		'email' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_disam']['email'],
+			'inputType'               => 'textarea',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'eval'                    => array
+			(
+				'cols'                => 80,
+				'rows'                => 5,
+				'style'               => 'height: 80px'
+			),
+			'sql'                     => "text NULL"
+		),
+		'gruppen' => array
+		(
+			'label'                   => $GLOBALS['TL_LANG']['tl_disam']['gruppen'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'columnFields'        => array
+				(
+					'name'            => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['gruppen_name'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'   => 'width:250px',
+						),
+					),
+					'dwz_von'         => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['gruppen_dwz_von'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'     => 'width:180px',
+							'maxlength' => 4
+						),
+					),
+					'dwz_bis'         => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['gruppen_dwz_bis'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'     => 'width:180px',
+							'maxlength' => 4
+						),
+					),
+				),
+			),
+			'sql'                     => 'blob NULL',
+		),
+		'turniere' => array
+		(
+			'label'                   => $GLOBALS['TL_LANG']['tl_disam']['turniere'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'columnFields'        => array
+				(
+					'name'            => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['turniere_name'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'   => 'width:250px',
+						),
+					),
+					'feldname'        => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['turniere_feldname'],
+						'exclude'     => true,
+						'inputType'   => 'text',
+						'eval'        => array
+						(
+							'style'   => 'width:180px'
+						),
+					),
+					'finale'          => array
+					(
+						'label'       => $GLOBALS['TL_LANG']['tl_disam']['turniere_finale'],
+						'exclude'     => true,
+						'inputType'   => 'checkbox',
+					),
+				),
+			),
+			'sql'                     => 'blob NULL',
 		),
 		'published' => array
 		(
@@ -236,6 +351,34 @@ class tl_disam extends \Backend
 		$this->Database->prepare("UPDATE tl_disam SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
 		               ->execute($intId);
 		$this->createNewVersion('tl_disam', $intId);
+	}
+
+	/**
+	 * Button zum Export der Anmeldungen
+	 * @param DataContainer $dc
+	 *
+	 * @return string HTML-Code
+	 */
+	public function getExportAnmeldungen(DataContainer $dc)
+	{
+
+		// Zurücklink generieren, ab C4 ist das ein symbolischer Link zu "contao"
+		if (version_compare(VERSION, '4.0', '>='))
+		{
+			$link = \System::getContainer()->get('router')->generate('contao_backend');
+		}
+		else
+		{
+			$link = 'contao/main.php';
+		}
+		$link .= '?do=disam&amp;key=exportXLS&amp;id=' . $dc->activeRecord->id . '&amp;rt=' . REQUEST_TOKEN;
+		
+		$string = '
+<div class="w50 widget">
+	<a href="'.$link.'">'.$GLOBALS['TL_LANG']['tl_disam']['export_anmeldungen'][0].'</a>
+</div>'; 
+		return $string;
+
 	}
 
 }

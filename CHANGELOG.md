@@ -1,10 +1,16 @@
 # Deutsche Internet-Schach-Amateurmeisterschaft - Changelog
 
+## Version 0.0.7 (2020-04-15)
+
+Add: Konfigurationsparameter für die Saison
+New: Umarbeitung des Exports
+New: Aufschlüsselung falls mehrere ChessBase-Accounts
+
 ## Version 0.0.6 (2020-04-11)
 
-Add: �bersetzungen
+Add: Übersetzungen
 Add: Definitionen tl_disam
-Add: Abh�ngigkeit menatwork/contao-multicolumnwizard-bundle
+Add: Abhängigkeit menatwork/contao-multicolumnwizard-bundle
 
 ## Version 0.0.5 (2020-04-11)
 
